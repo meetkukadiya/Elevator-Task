@@ -1,0 +1,99 @@
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.call-button {
+  /* margin-top: 6px; */
+  height: 35px;
+  width: 80px;
+  padding: 5px;
+  margin-left: 10px;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+  background-color: #5acd87;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.waiting-button {
+  /* margin-top: 6px; */
+  height: 35px;
+  width: 80px;
+  padding: 5px;
+  margin-left: 10px;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+  background-color: #ff1418;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.all-contain {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(232, 232, 232);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 2px 1px 2px rgb(219, 219, 219);
+  margin-top: 20px;
+}
+
+.main-label h3 {
+  display: flex;
+  justify-content: center;
+  margin: 0px;
+  margin-bottom: 30px;
+}
+
+.first-elv {
+  border-radius: 10px 0px 0px 10px;
+  overflow: hidden;
+}
+
+.last-elv {
+  border-radius: 0px 10px 10px 0px;
+  overflow: hidden;
+}
+
+.elevator-contain {
+  display: flex;
+  flex-direction: row;
+  /* background-color: rgb(232, 232, 232);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 2px 1px 2px rgb(219, 219, 219); */
+}
+
+.button-grp {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.floor-grp {
+  display: flex;
+  flex-direction: column;
+  margin-top: 13px;
+}
+
+.elevator-grp {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 11px;
+}
+
+.floor-grp p {
+  margin: 0px;
+  margin-bottom: 29px;
+  text-align: end;
+  margin-right: 10px;
+  font-weight: 500;
+}

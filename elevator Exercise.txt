@@ -1,0 +1,539 @@
+=====================================================
+	  				  Home.jsx
+=====================================================
+
+// import React, { useEffect, useState } from "react";
+// import "./Home.css";
+// import Button from "../../components/common_components/Button";
+// import Elevator from "../../components/common_components/Elevator/Elevator";
+
+// const Home = () => {
+//   const [currentSelectedFloors, setCurrentSelectedFloors] = useState([]);
+//   const [elevators, setElevators] = useState(
+//     Array.from({ length: 5 }, (_, index) => ({
+//       position: 0,
+//       busyTime: 0,
+//       busy: false,
+//       elevatorId: index + 1,
+//     }))
+//   );
+//   const [floorWaitinglist, setfloorWaitinglist] = useState([]);
+
+//   const elevatorPositions = elevators.map((elevator) => ({
+//     elevatorId: elevator.elevatorId,
+//     position: elevator.position,
+//   }));
+
+//   console.log("Current Floor position ==> ", elevatorPositions);
+//   // const [buttonStates, setButtonStates] = useState(Array(10).fill("green"));
+
+//   // console.log("Is Elevator Call from ==> ", currentSelectedFloors);
+//   console.log("Elevator Call Waiting list ==> ", floorWaitinglist);
+//   console.log("Elevator Movement ==> ", elevators);
+
+//   // const currentSelectedFloor = elevators.map(
+//   //   (elevator) => `f${elevator.position}`
+//   // );
+
+//   const handleFloorSelection = (floor) => {
+//     setfloorWaitinglist((selectedfloors) => {
+//       const newFloors = Array.isArray(floor) ? floor : [floor];
+//       const waitingList = [...new Set([...selectedfloors, ...newFloors])];
+//       return waitingList;
+//     });
+//   };
+
+//   useEffect(() => {
+//     if (floorWaitinglist.length === 0) return;
+
+//     // Currently Selected and on the way
+//     const currentWorkingFloor = floorWaitinglist[0];
+//     setCurrentSelectedFloors([currentWorkingFloor]);
+
+//     const newPosition = Number(currentWorkingFloor.slice(1)) || 0;
+
+//     // Check the available Elevator
+//     const availableElevators = elevators.filter((elevator) => !elevator.busy);
+
+//     // IF no free any elevator
+//     if (availableElevators.length === 0) {
+//       console.log("No free elevators , Please wait !");
+//       return;
+//     }
+
+//     // Check the distance between all elevators
+//     const elevatorDistances = availableElevators.map((elevator, index) => ({
+//       id: index + 1,
+//       distance: Math.abs(elevator.position - newPosition),
+//     }));
+
+//     // Check the nearest elevator
+//     const closestElevator = elevatorDistances.reduce(
+//       (lastposition, currentposition) =>
+//         lastposition.distance < currentposition.distance
+//           ? lastposition
+//           : currentposition
+//     );
+
+//     const elevatorId = closestElevator.id - 1;
+
+//     setElevators((prevElevators) => {
+//       const newElevators = [...prevElevators];
+
+//       function getAllNumbersBetween() {
+//         var numbers = [];
+//         if (arguments.length < 2) {
+//           return numbers;
+//         }
+//         Array.prototype.sort.call(arguments);
+//         var x = arguments[0];
+//         var y = arguments[arguments.length - 1];
+//         if (typeof x != "number" || typeof y != "number") {
+//           return numbers;
+//         }
+//         for (var i = x; i < y; i++) {
+//           numbers.push(i);
+//         }
+//         return numbers;
+//       }
+
+//       // If already on destionation floor then don't move elevator
+//       if (newElevators[elevatorId].position !== newPosition) {
+//         const busyTimePerFloor =
+//           Math.abs(newPosition - newElevators[elevatorId].position) * 3000;
+//         const StartPosition = newPosition;
+//         const DestinationPosition = newElevators[elevatorId].position;
+//         if (StartPosition > DestinationPosition) {
+//           const AscDestination = getAllNumbersBetween(
+//             StartPosition + 1,
+//             DestinationPosition + 1
+//           );
+
+//           // for (let i = 0; i < AscDestination.length; i++) {
+//           //   const FloorOneByOne = AscDestination[i];
+//           //   console.log(
+//           //     "FloorOneByOne ==> ",
+//           //     FloorOneByOne,
+//           //     "elevatorID",
+//           //     elevatorId
+//           //   );
+//           // }
+
+//           for (let i = 0; i < AscDestination.length; i++) {
+//             setTimeout(() => {
+//               setElevators((prev) => {
+//                 const updatedElevators = [...prev];
+//                 const FloorOneByOne = AscDestination[i];
+//                 if (AscDestination.length === i) {
+//                   newElevators[elevatorId].status = "On-way";
+//                 }
+//                 updatedElevators[elevatorId].busy = true;
+//                 newElevators[elevatorId].status = "On-way";
+//                 updatedElevators[elevatorId].busyTime =
+//                   (AscDestination.length - i) * 3000;
+//                 updatedElevators[elevatorId].position = FloorOneByOne;
+//                 return updatedElevators;
+//               });
+//             }, i * 3000);
+//           }
+
+//           {
+//             setElevators((prev) => {
+//               const updatedElevators = [...prev];
+//               updatedElevators[elevatorId].busy = false;
+//               newElevators[elevatorId].button = `f${newPosition}`;
+//               // newElevators[elevatorId].status = "Arrived!";
+//               updatedElevators[elevatorId].busyTime = 0;
+//               // updatedElevators[elevatorId].position = newPosition;
+//               console.log(
+//                 `Elevator ${elevatorId + 1} reached floor ${newPosition}.`
+//               );
+//               return updatedElevators;
+//             });
+//           }
+
+//           console.log(
+//             "Get All Asc. Numbers Between ==> ",
+//             AscDestination,
+//             `ElevatorId ==> ${elevatorId + 1}`
+//           );
+//         } else {
+//           const DesNumber = getAllNumbersBetween(
+//             StartPosition,
+//             DestinationPosition
+//           );
+//           const FinalDescendingDestionation = DesNumber.sort(function (a, b) {
+//             return b - a;
+//           });
+
+//           for (let i = 0; i < FinalDescendingDestionation.length; i++) {
+//             setTimeout(() => {
+//               const FloorOneByOne = FinalDescendingDestionation[i];
+//               newElevators[elevatorId].position = FloorOneByOne;
+//               console.log(
+//                 "Current Floor :==> ",
+//                 FloorOneByOne,
+//                 "elevatorID",
+//                 elevatorId + 1
+//               );
+//             }, i * 3000);
+//           }
+
+//           console.log(
+//             "Get All Des. Numbers Between ==> ",
+//             FinalDescendingDestionation,
+//             `ElevatorId ==> ${elevatorId + 1}`
+//           );
+//         }
+
+//         console.log("Destination Start Position ==> ", StartPosition);
+//         console.log("Destination End Position ==> ", DestinationPosition);
+
+//         // newElevators[elevatorId].position = FloorOneByOne;
+//         newElevators[elevatorId].busy = true;
+//         newElevators[elevatorId].button = `f${newPosition}`;
+//         newElevators[elevatorId].status = "On-way";
+//         newElevators[elevatorId].busyTime = busyTimePerFloor;
+
+//         // SetTimeOut For if Elevator is Free than assign to another floor
+
+//         setTimeout(() => {
+//           setElevators((prev) => {
+//             const updatedElevators = [...prev];
+//             updatedElevators[elevatorId].busy = false;
+//             newElevators[elevatorId].button = `f${newPosition}`;
+//             newElevators[elevatorId].status = "Arrived!";
+//             updatedElevators[elevatorId].busyTime = 0;
+//             updatedElevators[elevatorId].position = newPosition;
+//             console.log(
+//               `Elevator ${elevatorId + 1} reached floor ${newPosition}.`
+//             );
+//             return updatedElevators;
+//           });
+//         }, busyTimePerFloor);
+//       }
+
+//       return newElevators;
+//     });
+
+//     // Remove from waiting list if onway or reached on destination
+//     setfloorWaitinglist((prev) => prev.slice(1));
+//   }, [floorWaitinglist, elevators]);
+
+//   return (
+//     <div>
+//       <div className="main-container">
+//         <div className="all-contain">
+//           <div className="main-label">
+//             <h3>Elevator Exercise</h3>
+//           </div>
+//           <div className="elevator-contain">
+//             <div className="floor-grp">
+//               <p>9th</p>
+//               <p>8th</p>
+//               <p>7th</p>
+//               <p>6th</p>
+//               <p>5th</p>
+//               <p>4th</p>
+//               <p>3rd</p>
+//               <p>2nd</p>
+//               <p>1st</p>
+//               <p>Ground Floor</p>
+//             </div>
+
+//             <div className="elevator-grp">
+
+//               <Elevator
+//                 key="1"
+//                 className="first-elv"
+//                 elevatorId="1"
+//                 currentFloor={currentSelectedFloors}
+//               />
+//               <Elevator
+//                 key="2"
+//                 className=""
+//                 elevatorId="2"
+//                 currentFloor={currentSelectedFloors}
+//               />
+//               <Elevator
+//                 key="3"
+//                 className=""
+//                 elevatorId="3"
+//                 currentFloor={currentSelectedFloors}
+//               />
+//               <Elevator
+//                 key="4"
+//                 className=""
+//                 elevatorId="4"
+//                 currentFloor={currentSelectedFloors}
+//               />
+//               <Elevator
+//                 key="5"
+//                 className="last-elv"
+//                 elevatorId="5"
+//                 currentFloor={currentSelectedFloors}
+//               />
+//             </div>
+
+//             <div className="button-grp">
+//               <Button
+//                 className="call-button"
+//                 onClick={() => handleFloorSelection("f9")}
+//                 id="f9"
+//               >
+//                 Call
+//               </Button>
+//               <Button
+//                 className="call-button"
+//                 onClick={() => handleFloorSelection("f8")}
+//                 id="f8"
+//               >
+//                 Call
+//               </Button>
+//               <Button
+//                 className="call-button"
+//                 onClick={() => handleFloorSelection("f7")}
+//                 id="f7"
+//               >
+//                 Call
+//               </Button>
+//               <Button
+//                 className="call-button"
+//                 onClick={() => handleFloorSelection("f6")}
+//                 id="f6"
+//               >
+//                 Call
+//               </Button>
+//               <Button
+//                 className="call-button"
+//                 onClick={() => handleFloorSelection("f5")}
+//                 id="f5"
+//               >
+//                 Call
+//               </Button>
+//               <Button
+//                 className="call-button"
+//                 onClick={() => handleFloorSelection("f4")}
+//                 id="f4"
+//               >
+//                 Call
+//               </Button>
+//               <Button
+//                 className="call-button"
+//                 onClick={() => handleFloorSelection("f3")}
+//                 id="f3"
+//               >
+//                 Call
+//               </Button>
+//               <Button
+//                 className="call-button"
+//                 onClick={() => handleFloorSelection("f2")}
+//                 id="f2"
+//               >
+//                 Call
+//               </Button>
+//               <Button
+//                 className="call-button"
+//                 onClick={() => handleFloorSelection("f1")}
+//                 id="f1"
+//               >
+//                 Call
+//               </Button>
+//               <Button
+//                 className="call-button"
+//                 // onClick={(id) =>
+//                 //   // console.log(
+//                 //   //   "Push Button on Ground Floor !",
+//                 //   //   "Click on Floor ==> ",
+//                 //   //   id.target.id
+//                 //   // )
+//                 //   handleFloorSelection(id.target.id)
+//                 // }
+//                 onClick={() => handleFloorSelection("f0")}
+//                 id="f0"
+//               >
+//                 Call
+//               </Button>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Home;
+
+
+
+=====================================================
+	  			    Elevator.jsx
+=====================================================
+
+
+// import React from "react";
+// import "./Elevator.css";
+// import PropTypes from "prop-types";
+
+// import Elevator_Logo from "../../../assets/Elevator_Logo";
+
+// const Elevator = ({
+//   className,
+//   elevatorId,
+//   currentFloor,
+//   elevatorData = [],
+// }) => {
+//   console.log("Floor Selected in Elevator Final ==> ", currentFloor);
+
+//   console.log("Props For Elevator ==> ", elevatorData);
+
+//   // elevatorData.forEach((elevator) => {
+//   //   console.log(
+//   //     `Elevator ID: ${elevator.elevatorId}, Position: ${elevator.position}, Busy: ${elevator.busy}, Busy Time: ${elevator.busyTime} Elevator Status ${elevator.status}`
+//   //   );
+//   // });
+
+//   {
+//     elevatorData.map((elevator) => {
+//       console.log(
+//         `Elevator ID: ${elevator.elevatorId}, Position: ${elevator.position}, Busy: ${elevator.busy}, Busy Time: ${elevator.busyTime} Elevator Status ${elevator.status}`
+//       );
+//     });
+//   }
+//   console.log("Elevator Movement :::==> ", elevatorId);
+
+//   const CURRENT_PUSH = (
+//     <Elevator_Logo color="#94deb2" className="elevator-logo" />
+//   );
+
+//   return (
+//     // <div className={className} id={elevatorId}>
+//     //   <div className="elevator-floor" id={`e${elevatorId}_f9`}>
+//     //     {currentFloor === "f9" && CURRENT_PUSH}
+//     //   </div>
+//     //   <div className="elevator-floor" id={`e${elevatorId}_f8`}>
+//     //     {currentFloor === "f8" && CURRENT_PUSH}
+//     //   </div>
+//     //   <div className="elevator-floor" id={`e${elevatorId}_f7`}>
+//     //     {currentFloor === "f7" && CURRENT_PUSH}
+//     //   </div>
+//     //   <div className="elevator-floor" id={`e${elevatorId}_f6`}>
+//     //     {currentFloor === "f6" && CURRENT_PUSH}
+//     //   </div>
+//     //   <div className="elevator-floor" id={`e${elevatorId}_f5`}>
+//     //     {currentFloor === "f5" && CURRENT_PUSH}
+//     //   </div>
+//     //   <div className="elevator-floor" id={`e${elevatorId}_f4`}>
+//     //     {currentFloor === "f4" && CURRENT_PUSH}
+//     //   </div>
+//     //   <div className="elevator-floor" id={`e${elevatorId}_f3`}>
+//     //     {currentFloor === "f3" && CURRENT_PUSH}
+//     //   </div>
+//     //   <div className="elevator-floor" id={`e${elevatorId}_f2`}>
+//     //     {currentFloor === "f2" && CURRENT_PUSH}
+//     //   </div>
+//     //   <div className="elevator-floor" id={`e${elevatorId}_f1`}>
+//     //     {currentFloor === "f1" && CURRENT_PUSH}
+//     //   </div>
+//     //   <div className="elevator-floor1" id={`e${elevatorId}_f0`}>
+//     //     {currentFloor === "f0" && elevatorId === "2" && CURRENT_PUSH}
+//     //   </div>
+//     // </div>
+
+//     <div className={className} id={elevatorId}>
+//       {Array.from({ length: 10 }, (_, index) => {
+//         const floorNumber = 9 - index; // Floors 9 to 0
+//         const floorId = `f${floorNumber}`; // e.g., "f9", "f8", etc.
+//         return (
+//           <div
+//             className="elevator-floor"
+//             id={`e${elevatorId}_${floorId}`}
+//             key={floorId}
+//           >
+//             {currentFloor === floorId && CURRENT_PUSH}
+//           </div>
+//         );
+//       })}
+//     </div>
+//   );
+// };
+
+// Elevator.propTypes = {
+//   className: PropTypes.string.isRequired,
+//   elevatorId: PropTypes.number.isRequired,
+//   currentFloor: PropTypes.string.isRequired,
+//   elevatorData: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       elevatorId: PropTypes.number.isRequired,
+//       position: PropTypes.number.isRequired,
+//       busy: PropTypes.bool.isRequired,
+//       busyTime: PropTypes.number.isRequired,
+//       button: PropTypes.string,
+//     })
+//   ),
+// };
+
+// export default Elevator;
+
+// // import React, { useEffect } from "react";
+// // import "./Elevator.css";
+// // import PropTypes from "prop-types";
+// // import Elevator_Logo from "../../../assets/Elevator_Logo";
+
+// // const Elevator = ({
+// //   className,
+// //   elevatorId,
+// //   currentFloor,
+// //   elevatorData = [],
+// // }) => {
+// //   // Log the props
+// //   console.log("Props For Elevator ==> ", elevatorData);
+
+// //   // Check if elevatorData is defined before trying to iterate
+// //   elevatorData.forEach((elevator) => {
+// //     console.log(
+// //       `Elevator ID: ${elevator.elevatorId}, Position: ${elevator.position}, Busy: ${elevator.busy}, Busy Time: ${elevator.busyTime}`
+// //     );
+// //   });
+
+// //   const CURRENT_PUSH = (
+// //     <Elevator_Logo color="#94deb2" className="elevator-logo" />
+// //   );
+
+// //   useEffect(() => {
+// //     // Any additional effects can be handled here
+// //   }, []);
+
+// //   return (
+// //     <div className={className} id={elevatorId}>
+// //       {["f9", "f8", "f7", "f6", "f5", "f4", "f3", "f2", "f1", "f0"].map(
+// //         (floor) => (
+// //           <div
+// //             className="elevator-floor"
+// //             key={floor}
+// //             id={`e${elevatorId}_${floor}`}
+// //           >
+// //             {currentFloor === floor && CURRENT_PUSH}
+// //           </div>
+// //         )
+// //       )}
+// //     </div>
+// //   );
+// // };
+
+// // Elevator.propTypes = {
+// //   className: PropTypes.string.isRequired,
+// //   elevatorId: PropTypes.number.isRequired,
+// //   currentFloor: PropTypes.string.isRequired,
+// //   elevatorData: PropTypes.arrayOf(
+// //     PropTypes.shape({
+// //       elevatorId: PropTypes.number.isRequired,
+// //       position: PropTypes.number.isRequired,
+// //       busy: PropTypes.bool.isRequired,
+// //       busyTime: PropTypes.number.isRequired,
+// //       button: PropTypes.string,
+// //     })
+// //   ),
+// // };
+
+// // export default Elevator;
